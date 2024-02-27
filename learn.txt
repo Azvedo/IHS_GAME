@@ -1,0 +1,23 @@
+Verificar teclas digitadas e gerar movimento      
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT: #verifica qual tecla foi pressionada
+                main_game.car.position.x -= 40
+            if event.key == pygame.K_RIGHT: #verifica qual tecla foi pressionada
+                main_game.car.position.x += 40 
+            if event.key == pygame.K_UP:
+                main_game.car.position.y -=10
+            if event.key == pygame.K_DOWN:
+                main_game.car.position.y +=10
+
+
+
+Lógica usada para animar o zombie
+        image_index = 0 -> incrementado para pegar cada sprite presente no array
+        image_delay = 5 -> delay para animação
+        image_counter = 0 -> indice para incremento
+
+        assets.image_counter += 1 ->incrementa o indice
+        if assets.image_counter >= assets.image_delay: ->verifica o delay
+            assets.image_index = (assets.image_index + 1) % len(assets.move_zombie) -> garante que estará dentro dos limites do array
+            assets.image_counter = 0 -> reinicia a contagem
+        
