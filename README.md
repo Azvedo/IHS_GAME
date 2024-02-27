@@ -1,2 +1,2 @@
-# Pygame-test
-Learn pygame library making a car game
+# Projeto da disciplina de IHS - Interface de Hardware e Software
+
