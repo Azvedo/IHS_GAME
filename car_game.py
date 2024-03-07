@@ -10,9 +10,14 @@ class BULLET:
         #vetor da posicao da bala
         self.position = Vector2(self.bullet_pos_X, self.bullet_pos_Y)
         #retangulo para checar colisao da bala
-        self.bullet_rect = pygame.Rect(self.bullet_pos_X,self.bullet_pos_Y, assets.bullet_width_adjust*0.9,assets.bullet_height_adjust)    
+        self.bullet_rect = pygame.Rect(self.position.x,self.position.y, assets.bullet_width_adjust*0.9,assets.bullet_height_adjust)    
     def draw_bullet(self):
+<<<<<<< HEAD
         #desenhando uma bala
+=======
+        #desenhando todas as balas
+        self.bullet_rect.center = [self.position.x+0.5*assets.bullet_width_adjust,self.position.y+0.5*assets.bullet_height_adjust]
+>>>>>>> 1017222 (iframes do zumbi (wip))
         screen.blit(assets.bullet_asset_center, self.position)
         
 class CONE:
@@ -32,7 +37,8 @@ class CAR:
         self.car_pos_y = 570
         self.position = Vector2(self.car_pos_x, self.car_pos_y)
         self.direction = 0 # 0=meio, 1= direita e -1 = esquerda
-        self.car_rect = pygame.Rect(self.car_pos_x+5,self.car_pos_y+3, assets.car_width_adjust*0.9,assets.car_height_adjust)
+        self.iframes = 0
+        self.car_rect = pygame.Rect(self.position.x+5,self.position.y+3, assets.car_width_adjust*0.9,assets.car_height_adjust)
     def draw_car(self):
         if self.direction == 0:
             screen.blit(assets.car_asset_center,self.position)
@@ -45,6 +51,7 @@ class OBSTACULO:
     def __init__(self):
         #create a x and y position
         self.life = 3
+        self.iframes = 0
         self.randomize()
         self.zombie_rect = pygame.Rect(self.pos.x, self.pos.y, assets.zombie_width_adjust*0.8, assets.zombie_height_adjust*0.5)
         
@@ -90,8 +97,10 @@ class MAIN():
     def update(self):
         self.check_collision()
         self.car.direction = 0
+        self.car.iframes = max(self.car.iframes-1,0)
         for obst in self.obst_vector:
             obst.move_obstaculo()
+            obst.iframes = max(self.car.iframes-1,0)
         for bullet in self.bullet_vector:
             bullet.position.y -= 10
         
@@ -102,12 +111,22 @@ class MAIN():
 
     def check_collision(self):
         for obst in self.obst_vector:
-            if (self.car.car_rect).colliderect(obst.zombie_rect):
-                obst.life -= 1       
-                print(obst.life)
+            if((self.car.car_rect).colliderect(obst.zombie_rect) and self.car.iframes == 0):
+                obst.life -= 1
+                self.car.iframes += 20       
+                #print(obst.life)
                 if obst.life <= 0:
                     obst.life = 3
                     obst.randomize()
+            for bullet in self.bullet_vector:
+                print(self.car.iframes)
+                if((bullet.bullet_rect).colliderect(obst.zombie_rect) and obst.iframes == 0):
+                    obst.life -= 1
+                    obst.iframes += 20
+                    #print(obst.life)
+                    if obst.life <= 0:
+                        obst.life = 3
+                        obst.randomize()
 
            
 
