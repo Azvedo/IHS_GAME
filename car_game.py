@@ -64,12 +64,14 @@ class MAIN():
 
     def __init__(self):
         self.car = CAR()
-        self.obst = OBSTACULO()
-        self.bullet_vector = [] 
+        self.obst_vector = []
+        self.bullet_vector = []
+        self.obst_vector.append(OBSTACULO()) #OBSTACULO INICIAL P/ TESTES 
 
     def draw_elements(self):
         self.car.draw_car()
-        self.obst.draw_obstaculo()
+        for obst in self.obst_vector:
+            obst.draw_obstaculo()
         for bullet in self.bullet_vector:
             bullet.draw_bullet()
             if(bullet.position.y <= 0):
@@ -78,7 +80,8 @@ class MAIN():
     def update(self):
         self.check_collision()
         self.car.direction = 0
-        self.obst.move_obstaculo()
+        for obst in self.obst_vector:
+            obst.move_obstaculo()
         for bullet in self.bullet_vector:
             bullet.position.y -= 10
         
@@ -88,18 +91,13 @@ class MAIN():
     
 
     def check_collision(self):
-       
-        if (self.car.car_rect).colliderect(self.obst.zombie_rect):
-           colliding = True
-           if colliding:
-                self.obst.life -= 1
-                colliding = False
-        
-           print(self.obst.life)
-           if self.obst.life <= 0:
-               colliding = True
-               self.obst.life = 3
-               self.obst.randomize()
+        for obst in self.obst_vector:
+            if (self.car.car_rect).colliderect(obst.zombie_rect):
+                obst.life -= 1       
+                print(obst.life)
+                if obst.life <= 0:
+                    obst.life = 3
+                    obst.randomize()
 
            
 
