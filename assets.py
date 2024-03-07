@@ -1,5 +1,12 @@
 import pygame
 
+# Asset do cone (obstaculo 1)
+cone_asset = pygame.image.load('sprites/traffic-cone.png')
+escala_cone = 0.05
+cone_width_adjust = int(cone_asset.get_width() * escala_cone)
+cone_height_adjust = int(cone_asset.get_height() * escala_cone)
+cone_asset_center = pygame.transform.scale(cone_asset, (cone_width_adjust, cone_height_adjust))
+
 # Asset da bala
 bullet_asset = pygame.image.load('sprites/bullet3.png')
 escala_bala = 0.05
