@@ -5,18 +5,18 @@ import assets
 class BULLET:
     def __init__(self):
         self.car = CAR()
-
+        current_bullet_count = 0
         #posicoes iniciais da bala
-        self.bullet_pos_X = self.car.position.x + assets.bullet_width_adjust/2
+        self.bullet_pos_X = self.car.position.x + 21
         self.bullet_pos_Y = 570
+        #vetor da posicao da bala
         self.position = Vector2(self.bullet_pos_X, self.bullet_pos_Y)
         #retangulo para checar colisao da bala
-        self.bullet_rect = pygame.Rect(self.bullet_pos_X,self.bullet_pos_Y, assets.bullet_width_adjust*0.9,assets.bullet_height_adjust)        
+        self.bullet_rect = pygame.Rect(self.bullet_pos_X,self.bullet_pos_Y, assets.bullet_width_adjust*0.9,assets.bullet_height_adjust)    
     def draw_bullet(self):
-        #desenhando bala
+        #desenhando todas as balas
         screen.blit(assets.bullet_asset_center, self.position)
-
-
+        
 
 
 class CAR:
@@ -66,18 +66,21 @@ class MAIN():
 
     def __init__(self):
         self.car = CAR()
-        self.obst = OBSTACULO() 
-        self.bullet = BULLET()
+        self.obst = OBSTACULO()
+        self.bullet_vector = [] 
 
     def draw_elements(self):
         self.car.draw_car()
         self.obst.draw_obstaculo()
-        self.bullet.draw_bullet()
+        for bullet in self.bullet_vector:
+            bullet.draw_bullet()
         
     def update(self):
         self.check_collision()
         self.car.direction = 0
         self.obst.move_obstaculo()
+        for bullet in self.bullet_vector:
+            bullet.bullet_pos_Y -= 5
         
     def game_over(self):
         pygame.quit()
@@ -116,17 +119,17 @@ pygame.time.set_timer(SCREEN_UPDATE, 150)
 main_game = MAIN()
 
 while True: # loop game
-    # desenhar todos o elmentos
+    # desenhar todos o elementos
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             main_game.game_over() #garante que vai fechar o jogo
         if event.type == SCREEN_UPDATE:
             main_game.update()
-        if event.type == pygame.K_SPACE:
-            main_game.bullet.position.y += 1
-    
-    press = pygame.key.get_pressed()
+        if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_SPACE:
+                    main_game.bullet_vector.append(BULLET())
 
+    press = pygame.key.get_pressed()
     if press[pygame.K_LEFT] and main_game.car.position.x > 130:
         main_game.car.direction = -1
         main_game.car.position.x -= 10
@@ -141,12 +144,8 @@ while True: # loop game
     if press[pygame.K_DOWN]:
         main_game.car.position.y += 5
         main_game.car.car_rect.y += 5
-  
 
-    screen.blit(assets.background_correct_size, (0,0))
-    
-
+    screen.blit(assets.background_correct_size, (0,0)) 
     main_game.draw_elements()
     pygame.display.flip()
     clock.tick(60) # garante que o jogo rode a 60 fps
-    pygame.draw.rect(screen, 'blue', main_game.bullet.bullet_rect)
