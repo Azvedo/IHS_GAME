@@ -80,7 +80,7 @@ class MAIN():
         self.car.direction = 0
         self.obst.move_obstaculo()
         for bullet in self.bullet_vector:
-            bullet.bullet_pos_Y -= 5
+            bullet.position.y -= 10
         
     def game_over(self):
         pygame.quit()
