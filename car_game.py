@@ -3,10 +3,9 @@ from pygame.math import Vector2
 import assets
 
 class BULLET:
-    def __init__(self):
-        self.car = CAR()
+    def __init__(self, car_pos_x):
         #posicoes iniciais da bala
-        self.bullet_pos_X = self.car.position.x + 21
+        self.bullet_pos_X = car_pos_x + 21
         self.bullet_pos_Y = 570
         #vetor da posicao da bala
         self.position = Vector2(self.bullet_pos_X, self.bullet_pos_Y)
@@ -128,7 +127,7 @@ while True: # loop game
             main_game.update()
         if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
-                    main_game.bullet_vector.append(BULLET())
+                    main_game.bullet_vector.append(BULLET(main_game.car.position.x))
 
     press = pygame.key.get_pressed()
     if press[pygame.K_LEFT] and main_game.car.position.x > 130:
