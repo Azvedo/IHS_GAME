@@ -12,24 +12,11 @@ class BULLET:
         #retangulo para checar colisao da bala
         self.bullet_rect = pygame.Rect(self.position.x,self.position.y, assets.bullet_width_adjust*0.9,assets.bullet_height_adjust)    
     def draw_bullet(self):
-<<<<<<< HEAD
-        #desenhando uma bala
-=======
         #desenhando todas as balas
         self.bullet_rect.center = [self.position.x+0.5*assets.bullet_width_adjust,self.position.y+0.5*assets.bullet_height_adjust]
->>>>>>> 1017222 (iframes do zumbi (wip))
         screen.blit(assets.bullet_asset_center, self.position)
         
-class CONE:
-    def __init__(self):
-        #posicoes iniciais do cone
-        self.cone_pos_x = 
-        self.cone_pos_y =
-        #vetor da posicao do cone
 
-        #retangulo para checar colisao do cone
-    def draw_cone(self):
-        #desenhando um cone
 
 class CAR:
     def __init__(self):
