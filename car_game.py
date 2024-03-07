@@ -5,7 +5,6 @@ import assets
 class BULLET:
     def __init__(self):
         self.car = CAR()
-        current_bullet_count = 0
         #posicoes iniciais da bala
         self.bullet_pos_X = self.car.position.x + 21
         self.bullet_pos_Y = 570
@@ -74,6 +73,8 @@ class MAIN():
         self.obst.draw_obstaculo()
         for bullet in self.bullet_vector:
             bullet.draw_bullet()
+            if(bullet.position.y <= 0):
+                self.bullet_vector.remove(bullet)
         
     def update(self):
         self.check_collision()
@@ -88,13 +89,13 @@ class MAIN():
     
 
     def check_collision(self):
-        
+       
         if (self.car.car_rect).colliderect(self.obst.zombie_rect):
            colliding = True
            if colliding:
                 self.obst.life -= 1
                 colliding = False
-
+        
            print(self.obst.life)
            if self.obst.life <= 0:
                colliding = True
@@ -116,7 +117,7 @@ clock = pygame.time.Clock() # para garantir que o jogo não mude de velocidade d
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE, 150)
 
-main_game = MAIN()
+main_game = MAIN() 
 
 while True: # loop game
     # desenhar todos o elementos
