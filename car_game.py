@@ -67,6 +67,7 @@ class MAIN():
         self.obst_vector = []
         self.bullet_vector = []
         self.obst_vector.append(OBSTACULO()) #OBSTACULO INICIAL P/ TESTES 
+        self.obst_vector.append(OBSTACULO())
 
     def draw_elements(self):
         self.car.draw_car()
