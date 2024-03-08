@@ -12,20 +12,24 @@ class BULLET:
         #retangulo para checar colisao da bala
         self.bullet_rect = pygame.Rect(self.position.x,self.position.y, assets.bullet_width_adjust*0.9,assets.bullet_height_adjust)    
     def draw_bullet(self):
-        #desenhando todas as balas
+        #centro do retangulo da bala
         self.bullet_rect.center = [self.position.x+0.5*assets.bullet_width_adjust,self.position.y+0.5*assets.bullet_height_adjust]
+        #desenhando uma bala
         screen.blit(assets.bullet_asset_center, self.position)
         
-
-
 class CAR:
     def __init__(self):
+        #posicoes iniciais do carro
         self.car_pos_x = screen.get_width() / 1.9
         self.car_pos_y = 570
+        #vetor da posicao do carro
         self.position = Vector2(self.car_pos_x, self.car_pos_y)
-        self.direction = 0 # 0=meio, 1= direita e -1 = esquerda
+        #direcao do carro (para fazer a angulacao da imagem) #0=meio, 1= direita e -1 = esquerda
+        self.direction = 0 
         self.iframes = 0
+        #retangulo para checar colisao do carro
         self.car_rect = pygame.Rect(self.position.x+5,self.position.y+3, assets.car_width_adjust*0.9,assets.car_height_adjust)
+    #desenhando o carro de acordo com sua direcao para a angulacao
     def draw_car(self):
         if self.direction == 0:
             screen.blit(assets.car_asset_center,self.position)
@@ -36,29 +40,32 @@ class CAR:
         
 class OBSTACULO:
     def __init__(self):
-        #create a x and y position
+        #criando as vidas do zumbi
         self.life = 3
         self.iframes = 0
+        #gerando um x aleatorio para a posicao do zumbi 
         self.randomize()
+        #retangulo para checar colisao do zumbi
         self.zombie_rect = pygame.Rect(self.pos.x, self.pos.y, assets.zombie_width_adjust*0.8, assets.zombie_height_adjust*0.5)
         
-
     def draw_obstaculo(self):
+        #centro do retangulo do zumbi
         self.zombie_rect.center = [self.pos.x+35 , self.pos.y+30]
+        #contador para animacao da imagem do zumbi
         assets.image_counter += 1
         if assets.image_counter >= assets.image_delay:
             assets.image_index = (assets.image_index + 1) % len(assets.move_zombie)
             assets.image_counter = 0
-        # Renderização do sprite
+        #desenhando o sprite do zumbi
         current_image = assets.move_zombie[assets.image_index]
         screen.blit(current_image, self.pos)
-
 
     def randomize(self):
         self.x = random.randint(125, 405)
         self.y = 5
         self.pos = pygame.math.Vector2(self.x, self.y) #vetor de posições
-
+    
+    #movendo sempre o obstaculo para baixo
     def move_obstaculo(self):
         self.pos.y += 8
         self.zombie_rect.y += 8
@@ -76,6 +83,8 @@ class MAIN():
         self.car.draw_car()
         for obst in self.obst_vector:
             obst.draw_obstaculo()
+            if(obst.pos.y>=650):
+                self.obst_vector.remove(obst)
         for bullet in self.bullet_vector:
             bullet.draw_bullet()
             if(bullet.position.y <= 0):
@@ -89,7 +98,8 @@ class MAIN():
             obst.move_obstaculo()
             obst.iframes = max(self.car.iframes-1,0)
         for bullet in self.bullet_vector:
-            bullet.position.y -= 10
+            #movendo cada bala
+            bullet.position.y -= 20
         
     def game_over(self):
         pygame.quit()
