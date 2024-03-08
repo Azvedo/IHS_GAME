@@ -74,19 +74,26 @@ class MAIN():
 
     def __init__(self):
         self.car = CAR()
+        #inciciando vetor de zumbis
         self.obst_vector = []
+        #iniciando vetor de balas
         self.bullet_vector = []
         self.obst_vector.append(OBSTACULO()) #OBSTACULO INICIAL P/ TESTES 
         self.obst_vector.append(OBSTACULO())
 
+    #funcao para desenhar elementos
     def draw_elements(self):
         self.car.draw_car()
         for obst in self.obst_vector:
+            #desenhando cada obstaculo
             obst.draw_obstaculo()
+            #removendo o obstaculo caso passe do final
             if(obst.pos.y>=650):
                 self.obst_vector.remove(obst)
         for bullet in self.bullet_vector:
+            #desenhando cada bala
             bullet.draw_bullet()
+            #removendo a bala caso passe do final
             if(bullet.position.y <= 0):
                 self.bullet_vector.remove(bullet)
         
@@ -125,17 +132,12 @@ class MAIN():
                         obst.life = 3
                         obst.randomize()
 
-           
-
-
 pygame.init()
 screen_height = 700
 screen_width = 600
 screen = pygame.display.set_mode((screen_width, screen_height))
 pygame.display.set_caption("Meu jogo")
 clock = pygame.time.Clock() # para garantir que o jogo não mude de velocidade de pc para pc
-
-
 
 SCREEN_UPDATE = pygame.USEREVENT
 pygame.time.set_timer(SCREEN_UPDATE, 150)
