@@ -7,6 +7,7 @@ class BULLET:
         #posicoes iniciais da bala
         self.bullet_pos_X = car_pos_x + 21
         self.bullet_pos_Y = 570
+        self.velocity = 5
         #vetor da posicao da bala
         self.position = Vector2(self.bullet_pos_X, self.bullet_pos_Y)
         #retangulo para checar colisao da bala
@@ -26,7 +27,6 @@ class CAR:
         self.position = Vector2(self.car_pos_x, self.car_pos_y)
         #direcao do carro (para fazer a angulacao da imagem) #0=meio, 1= direita e -1 = esquerda
         self.direction = 0 
-        self.iframes = 0
         #retangulo para checar colisao do carro
         self.car_rect = pygame.Rect(self.position.x+5,self.position.y+3, assets.car_width_adjust*0.9,assets.car_height_adjust)
     #desenhando o carro de acordo com sua direcao para a angulacao
@@ -42,7 +42,6 @@ class OBSTACULO:
     def __init__(self):
         #criando as vidas do zumbi
         self.life = 3
-        self.iframes = 0
         #gerando um x aleatorio para a posicao do zumbi 
         self.randomize()
         #retangulo para checar colisao do zumbi
@@ -100,13 +99,11 @@ class MAIN():
     def update(self):
         self.check_collision()
         self.car.direction = 0
-        self.car.iframes = max(self.car.iframes-1,0)
         for obst in self.obst_vector:
             obst.move_obstaculo()
-            obst.iframes = max(self.car.iframes-1,0)
         for bullet in self.bullet_vector:
             #movendo cada bala
-            bullet.position.y -= 20
+            bullet.position.y -= bullet.velocity
         
     def game_over(self):
         pygame.quit()
@@ -115,18 +112,16 @@ class MAIN():
 
     def check_collision(self):
         for obst in self.obst_vector:
-            if((self.car.car_rect).colliderect(obst.zombie_rect) and self.car.iframes == 0):
-                obst.life -= 1
-                self.car.iframes += 20       
+            if((self.car.car_rect).colliderect(obst.zombie_rect)):
+                obst.life -= 1      
                 #print(obst.life)
                 if obst.life <= 0:
                     obst.life = 3
                     obst.randomize()
             for bullet in self.bullet_vector:
-                print(self.car.iframes)
-                if((bullet.bullet_rect).colliderect(obst.zombie_rect) and obst.iframes == 0):
+                if((bullet.bullet_rect).colliderect(obst.zombie_rect)):
                     obst.life -= 1
-                    obst.iframes += 20
+                    self.bullet_vector.remove(bullet) 
                     #print(obst.life)
                     if obst.life <= 0:
                         obst.life = 3
@@ -140,7 +135,7 @@ pygame.display.set_caption("Meu jogo")
 clock = pygame.time.Clock() # para garantir que o jogo não mude de velocidade de pc para pc
 
 SCREEN_UPDATE = pygame.USEREVENT
-pygame.time.set_timer(SCREEN_UPDATE, 150)
+pygame.time.set_timer(SCREEN_UPDATE, 16)
 
 main_game = MAIN() 
 
